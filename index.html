@@ -3,106 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة توريد دولر | Dolr Gateway</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Dolr Pay | توريد فوري</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f4f7f6; }
-        .dolr-card { border: 1px solid #e0e0e0; transition: all 0.3s ease; }
-        .dolr-card:hover { transform: scale(1.02); border-color: #2563eb; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .gradient-text { background: linear-gradient(90deg, #1e3a8a, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        :root {
+            --accent: #2563eb;
+            --bg: #ffffff;
+            --card: #f8fafc;
+            --text: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Arabic', sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo-area { margin-bottom: 2rem; }
+        .logo-area img { width: 80px; border-radius: 20px; margin-bottom: 10px; }
+        .logo-area h1 { font-size: 1.5rem; font-weight: 800; color: #0f172a; }
+
+        .payment-box {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-group { text-align: right; margin-bottom: 1.2rem; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: #64748b; }
+        
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
+        .btn-pay {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-pay:hover { background: #1d4ed8; transform: translateY(-1px); }
+        .btn-pay:active { transform: translateY(0); }
+
+        .status { margin-top: 1rem; font-size: 0.85rem; display: none; }
+        .status.loading { color: var(--accent); }
+
+        footer { margin-top: 2rem; color: #94a3b8; font-size: 0.75rem; }
     </style>
 </head>
 <body>
 
-    <nav class="bg-white shadow-sm p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-black gradient-text tracking-tighter">DOLR TAWREED</h1>
-            <span class="text-sm font-bold text-gray-400">بوابة التوريد الرقمي</span>
+    <div class="container">
+        <div class="logo-area">
+            <img src="IMG_7454.jpeg" alt="Dolr">
+            <h1>بوابة توريد دولر</h1>
         </div>
-    </nav>
 
-    <header class="py-12 text-center">
-        <h2 class="text-4xl font-black text-gray-800 mb-2">بوابة توريد دولر (Dolr)</h2>
-        <p class="text-gray-500">اختر المنتج وسيم تحويلك مباشرة لإتمام الدفع والاستلام</p>
-    </header>
+        <div class="payment-box">
+            <form id="payForm">
+                <div class="input-group">
+                    <label>المبلغ المطلوب (SAR)</label>
+                    <input type="number" id="amount" placeholder="0.00" required>
+                </div>
+                <div class="input-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="email" placeholder="mail@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>رقم الجوال</label>
+                    <input type="tel" id="phone" placeholder="9665xxxxxxxx" required>
+                </div>
 
-    <main class="container mx-auto px-4 pb-20">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <div class="dolr-card bg-white p-8 rounded-3xl text-center">
-                <div class="text-4xl mb-4">🌐</div>
-                <h3 class="text-xl font-bold text-gray-800">إنترنت STC مفتوح</h3>
-                <p class="text-sm text-gray-400 mt-1">توريد فوري</p>
-                <div class="text-3xl font-black text-blue-600 my-6">45 ريال</div>
-                <button onclick="redirectToPayment(45, 'STC_NET')" class="w-full bg-black text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition">اطلب الآن</button>
-            </div>
-
-            <div class="dolr-card bg-white p-8 rounded-3xl text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-yellow-400 text-[10px] px-3 py-1 font-bold">الأكثر طلباً</div>
-                <div class="text-4xl mb-4">👻</div>
-                <h3 class="text-xl font-bold text-gray-800">سناب شات الرسمي</h3>
-                <select id="snap-plan" class="w-full mt-4 p-3 border border-gray-100 rounded-xl bg-gray-50 font-bold text-center outline-none">
-                    <option value="16">3 أشهر - 16 ريال</option>
-                    <option value="30">6 أشهر - 30 ريال</option>
-                    <option value="72">سنة كاملة - 72 ريال</option>
-                </select>
-                <div id="snap-display-price" class="text-3xl font-black text-blue-600 my-6">16 ريال</div>
-                <button onclick="initSnapPayment()" class="w-full bg-black text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition">اطلب الآن</button>
-            </div>
-
-            <div class="dolr-card bg-white p-8 rounded-3xl text-center">
-                <div class="text-4xl mb-4">🤖</div>
-                <h3 class="text-xl font-bold text-gray-800">CHAT GPT Plus</h3>
-                <p class="text-sm text-gray-400 mt-1">اشتراك رسمي</p>
-                <div class="text-3xl font-black text-blue-600 my-6">25 ريال</div>
-                <button onclick="redirectToPayment(25, 'CHATGPT_YEAR')" class="w-full bg-black text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition">اطلب الآن</button>
-            </div>
-
+                <button type="submit" class="btn-pay" id="mainBtn">دفع آمن الآن</button>
+            </form>
+            <div id="statusMsg" class="status">جاري تحويلك لمنصة الدفع...</div>
         </div>
-    </main>
+
+        <footer>جميع الحقوق محفوظة لـ Dolr &copy; 2026</footer>
+    </div>
 
     <script>
-        // تحديث السعر المعروض للسناب عند تغيير الاختيار
-        document.getElementById('snap-plan')?.addEventListener('change', function(e) {
-            document.getElementById('snap-display-price').innerText = e.target.value + " ريال";
-        });
+        // دالة الـ MD5 والتشفير (نفس المنطق القوي في كودك)
+        // [ملاحظة: أبقِ دوال التشفير md5 و sha1 التي في كودك هنا]
+        
+        const CONFIG = {
+            MERCHANT_ID: "983c9669-9278-4dd1-950f-8b8fbb0a14d2",
+            MERCHANT_PASSWORD: "7ceb6437-92bc-411b-98fa-be054b39eaba",
+            BOT_TOKEN: "8254444681:AAHYJz1CtqVTT1ovCVUOPCckj3AySLAs8UI",
+            CHAT_ID: "591768998"
+        };
 
-        function initSnapPayment() {
-            const price = document.getElementById('snap-plan').value;
-            const planName = document.getElementById('snap-plan').options[document.getElementById('snap-plan').selectedIndex].text;
-            redirectToPayment(price, `سناب شات - ${planName}`);
+        // دالة التنبيه السريع للبوت
+        function notifyTelegram(msg) {
+            const url = `https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage?chat_id=${CONFIG.CHAT_ID}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
+            new Image().src = url; 
         }
 
-        // الوظيفة الأساسية للتحويل لبوابة الدفع وإرسال إشعار التليجرام
-        async function redirectToPayment(amount, productName) {
+        document.getElementById('payForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('mainBtn');
+            const status = document.getElementById('statusMsg');
             
-            // بيانات التليجرام الخاصة بك
-            const BOT_TOKEN = 'YOUR_BOT_TOKEN'; 
-            const CHAT_ID = 'YOUR_CHAT_ID';
+            btn.disabled = true;
+            btn.innerText = "جاري المعالجة...";
+            status.style.display = "block";
 
-            const message = `
-💰 **طلب جديد من بوابة توريد Dolr**
----
-📦 المنتج: ${productName}
-💵 السعر الثابت: ${amount} ريال
-💳 الحالة: تم التحويل لمنصة الدفع
----
-            `;
+            const amt = parseFloat(document.getElementById('amount').value).toFixed(2);
+            const email = document.getElementById('email').value;
+            const orderId = "DOLR-" + Date.now();
 
-            // إرسال الإشعار للبوت
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
-            });
+            // إرسال إشعار فوري للتليجرام بأن العميل بدأ العملية
+            notifyTelegram(`🔔 *محاولة دفع جديدة*\n💰 المبلغ: ${amt} SAR\n📧 ${email}`);
 
-            // هنا تضع رابط بوابة إدفع بي الخاص بك
-            // سيتم توجيه العميل للدفع
-            alert(`سيتم تحويلك الآن لمنصة الدفع لمنتج ${productName} بمبلغ ${amount} ريال`);
+            // هنا يتم تنفيذ منطق الهاش (Hash) والتحويل التلقائي لـ EdfaPay
+            // سنستخدم نفس منطق الـ Fetch الموجود بكودك للتحويل لـ https://api.edfapay.com/payment/initiate
             
-            // window.location.href = `رابط_بوابة_الدفع_الخاص_بك?amount=${amount}`;
-        }
+            // محاكاة التحويل الناجح:
+            console.log("إرسال البيانات لـ EdfaPay...");
+            
+            // ملاحظة: تأكد من دمج دوال التشفير (md5, sha1) داخل هذا السكريبت ليعمل التحويل التلقائي بنجاح.
+        };
     </script>
 </body>
 </html>
