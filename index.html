@@ -3,174 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة توريد دولر | Dolr Tawreed</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <title>بوابة توريد دولر | Dolr Pay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #3b82f6;
-            --bg: #020617;
-            --card: #0f172a;
-            --text-dim: #94a3b8;
-            --border: #1e293b;
-        }
-
+        :root { --primary: #3b82f6; --bg: #020617; --card: #0f172a; --border: #1e293b; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg); color: white; padding: 20px; display: flex; justify-content: center; }
-
-        .wrapper { width: 100%; max-width: 500px; animation: fadeIn 0.8s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+        body { background-color: var(--bg); color: white; display: flex; justify-content: center; padding: 20px; }
+        .wrapper { width: 100%; max-width: 450px; }
         header { text-align: center; margin-bottom: 2rem; }
-        .logo { width: 80px; height: 80px; border-radius: 20px; margin-bottom: 1rem; border: 2px solid var(--primary); }
-        header h1 { font-size: 1.5rem; font-weight: 900; }
-
-        /* قسم المنتجات */
-        .products-grid { display: grid; gap: 12px; margin-bottom: 2rem; }
-        .product-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 15px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.3s;
-        }
-        .product-item:hover { border-color: var(--primary); background: #131e33; }
-        .product-item.selected { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
-        .p-info h3 { font-size: 0.95rem; font-weight: 700; }
-        .p-info p { font-size: 0.75rem; color: var(--text-dim); }
-        .p-price { font-weight: 800; color: var(--primary); }
-
-        /* نموذج البيانات */
-        .payment-form {
-            background: var(--card);
-            padding: 25px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            display: none; /* يظهر عند اختيار منتج */
-        }
-        .form-group { margin-bottom: 15px; text-align: right; }
-        label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 5px; }
-        input {
-            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border);
-            background: #1e293b; color: white; outline: none; text-align: right;
-        }
-        input:focus { border-color: var(--primary); }
-
-        .btn-submit {
-            width: 100%; padding: 15px; background: var(--primary); color: white;
-            border: none; border-radius: 12px; font-weight: 800; cursor: pointer;
-            margin-top: 10px; transition: 0.3s;
-        }
-        .btn-submit:hover { background: #2563eb; }
-
-        .footer-text { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: var(--text-dim); }
+        .logo { width: 70px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--primary); }
+        .products-grid { display: grid; gap: 10px; margin-bottom: 1.5rem; }
+        .product-item { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 12px; cursor: pointer; display: flex; justify-content: space-between; transition: 0.3s; }
+        .product-item.selected { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); }
+        .payment-form { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); display: none; }
+        .form-group { margin-bottom: 12px; text-align: right; }
+        label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: #1e293b; color: white; text-align: right; }
+        .btn-submit { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        #loader { display: none; color: var(--primary); font-size: 0.9rem; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="wrapper">
-        <header>
-            <img src="IMG_7454.jpeg" alt="Dolr" class="logo">
-            <h1>بوابة توريد دولر 💰</h1>
-            <p style="color: var(--text-dim); font-size: 0.8rem;">اختر المنتج لإتمام عملية التوريد</p>
-        </header>
+<div class="wrapper">
+    <header>
+        <img src="IMG_7454.jpeg" alt="Dolr" class="logo">
+        <h2>بوابة توريد دولر</h2>
+    </header>
 
-        <div class="products-grid" id="productsGrid">
-            <div class="product-item" onclick="selectProduct(this, 'نت STC مفتوح', 45)">
-                <div class="p-info"><h3>منتج النت STC</h3><p>توريد فوري - إنترنت مفتوح</p></div>
-                <div class="p-price">45 ريال</div>
-            </div>
-            
-            <div class="product-item" onclick="selectProduct(this, 'سناب رسمي (3 أشهر)', 16)">
-                <div class="p-info"><h3>سناب شات الرسمي</h3><p>اشتراك 3 أشهر</p></div>
-                <div class="p-price">16 ريال</div>
-            </div>
-
-            <div class="product-item" onclick="selectProduct(this, 'سناب رسمي (سنة)', 72)">
-                <div class="p-info"><h3>سناب شات الرسمي</h3><p>اشتراك سنة كاملة</p></div>
-                <div class="p-price">72 ريال</div>
-            </div>
-
-            <div class="product-item" onclick="selectProduct(this, 'ChatGPT Plus', 25)">
-                <div class="p-info"><h3>ChatGPT Plus</h3><p>اشتراك سنوي</p></div>
-                <div class="p-price">25 ريال</div>
-            </div>
+    <div class="products-grid">
+        <div class="product-item" onclick="selectP(this, 'STC Net', 45)">
+            <span>نت STC مفتوح</span><b>45 ريال</b>
         </div>
-
-        <div class="payment-form" id="payFormArea">
-            <div style="margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                <span id="selectedTitle" style="font-weight: 800; color: var(--primary);"></span>
-                <span id="selectedPrice" style="float: left; font-weight: 800;"></span>
-            </div>
-
-            <form id="finalPayForm">
-                <div class="form-group">
-                    <label>الاسم الكامل</label>
-                    <input type="text" id="custName" placeholder="اكتب اسمك هنا" required>
-                </div>
-                <div class="form-group">
-                    <label>البريد الإلكتروني</label>
-                    <input type="email" id="custEmail" placeholder="example@mail.com" required>
-                </div>
-                <div class="form-group">
-                    <label>رقم الجوال</label>
-                    <input type="tel" id="custPhone" placeholder="9665xxxxxxxx" required>
-                </div>
-                <button type="submit" class="btn-submit">تأكيد ودفع</button>
-            </form>
+        <div class="product-item" onclick="selectP(this, 'Snap 3 Months', 16)">
+            <span>سناب 3 أشهر</span><b>16 ريال</b>
         </div>
-
-        <div class="footer-text">نظام تشفير آمن 256-bit | Dolr Pay 2026</div>
+        <div class="product-item" onclick="selectP(this, 'Snap 1 Year', 72)">
+            <span>سناب سنة</span><b>72 ريال</b>
+        </div>
+        <div class="product-item" onclick="selectP(this, 'ChatGPT Plus', 25)">
+            <span>ChatGPT سنة</span><b>25 ريال</b>
+        </div>
     </div>
 
-    <script>
-        let currentProduct = { name: '', price: 0 };
+    <div class="payment-form" id="formArea">
+        <h4 id="targetProduct" style="color: var(--primary); margin-bottom: 15px; text-align: center;"></h4>
+        <form id="payNowForm">
+            <div class="form-group"><label>الاسم</label><input type="text" id="name" required></div>
+            <div class="form-group"><label>البريد</label><input type="email" id="email" required></div>
+            <div class="form-group"><label>الجوال</label><input type="tel" id="phone" placeholder="9665xxx" required></div>
+            <button type="submit" class="btn-submit">تأكيد ودفع آمن</button>
+            <div id="loader">جاري تحويلك لبوابة الدفع...</div>
+        </form>
+    </div>
+</div>
 
-        function selectProduct(el, name, price) {
-            // تحديث الشكل
-            document.querySelectorAll('.product-item').forEach(i => i.classList.remove('selected'));
-            el.classList.add('selected');
+<script>
+    // بياناتك الخاصة
+    const CONFIG = {
+        MID: "983c9669-9278-4dd1-950f-8b8fbb0a14d2",
+        M_PASS: "7ceb6437-92bc-411b-98fa-be054b39eaba",
+        BOT_TOKEN: "8254444681:AAHYJz1CtqVTT1ovCVUOPCckj3AySLAs8UI",
+        CHAT_ID: "591768998"
+    };
 
-            // تحديث البيانات
-            currentProduct.name = name;
-            currentProduct.price = price;
+    let selected = { name: '', price: 0 };
 
-            // إظهار الفورم
-            document.getElementById('payFormArea').style.display = 'block';
-            document.getElementById('selectedTitle').innerText = name;
-            document.getElementById('selectedPrice').innerText = price + " ريال";
-            
-            // سكرول خفيف للفورم
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    function selectP(el, n, p) {
+        document.querySelectorAll('.product-item').forEach(i => i.classList.remove('selected'));
+        el.classList.add('selected');
+        selected = { name: n, price: p };
+        document.getElementById('formArea').style.display = 'block';
+        document.getElementById('targetProduct').innerText = `طلب: ${n} (${p} ريال)`;
+    }
+
+    // دوال التشفير الضرورية
+    function md5(s) { /* دالة MD5 مدمجة داخلياً لتعمل في المتصفح */
+        var k=[],i=0;for(;i<64;)k[i]=0|(Math.abs(Math.sin(++i))*4294967296);
+        var b=[1732584193,-271733879,-1732584194,271733878],h=[b[0],b[1],b[2],b[3]],j,l,m,n,o,p,q,r,t,u,v,x,y,z,A,B,C,D,E,F;
+        s=unescape(encodeURIComponent(s));var w=s.length,g=[(w+8>>6)+1<<4],e=0;for(;e<w;e++)g[e>>2]|=s.charCodeAt(e)<<(e%4<<3);
+        g[e>>2]|=128<<(e%4<<3);g[g.length-2]=w*8;for(i=0;i<g.length;i+=16){
+            a=h[0];b=h[1];c=h[2];d=h[3];for(j=0;j<64;j++){
+                if(j<16){f=(b&c)|(~b&d);k1=j}else if(j<32){f=(d&b)|(~d&c);k1=(5*j+1)%16}else if(j<48){f=b^c^d;k1=(3*j+5)%16}else{f=c^(b|~d);k1=(7*j)%16}
+                temp=d;d=c;c=b;b=b+((a+f+k[j]+(g[i+k1]||0))<<(s1=[7,12,17,22,5,9,14,20,4,11,16,23,6,10,15,21][(j>>4)*4+j%4])|b+((a+f+k[j]+(g[i+k1]||0))>>>(32-s1)));a=temp;
+            }h[0]+=a;h[1]+=b;h[2]+=c;h[3]+=d;
+        }for(i=0;i<4;i++){var s2="";for(j=0;j<4;j++)s2+=(h[i]>>(j*8)&255).toString(16).padStart(2,"0");h[i]=s2}
+        return h.join("");
+    }
+
+    async function sha1(m) {
+        const buf = new TextEncoder().encode(m);
+        const hash = await crypto.subtle.digest('SHA-1', buf);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    document.getElementById('payNowForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
+
+        const orderId = "DOLR-" + Date.now();
+        const amount = selected.price.toFixed(2);
+        const desc = `Purchase ${selected.name}`;
+
+        // إشعار تليجرام
+        const tMsg = `💰 *محاولة دفع دولر*\nالمنتج: ${selected.name}\nالمبلغ: ${amount}\nالعميل: ${document.getElementById('name').value}`;
+        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage?chat_id=${CONFIG.CHAT_ID}&text=${encodeURIComponent(tMsg)}&parse_mode=Markdown`);
+
+        // توليد الهاش
+        const raw = (orderId + amount + "SAR" + desc + CONFIG.M_PASS).toUpperCase();
+        const hash = await sha1(md5(raw));
+
+        // إنشاء نموذج مخفي للإرسال لـ Edfapay
+        const f = document.createElement('form');
+        f.method = 'POST';
+        f.action = 'https://api.edfapay.com/payment/initiate';
+        
+        const data = {
+            edfa_merchant_id: CONFIG.MID,
+            order_id: orderId,
+            order_amount: amount,
+            order_currency: "SAR",
+            order_description: desc,
+            payer_email: document.getElementById('email').value,
+            payer_phone: document.getElementById('phone').value,
+            payer_first_name: document.getElementById('name').value,
+            payer_last_name: "Customer",
+            payer_country: "SA",
+            payer_city: "Riyadh",
+            payer_address: "Online",
+            payer_zip: "12345",
+            payer_ip: "127.0.0.1",
+            term_url_3ds: window.location.href,
+            success_url: window.location.href,
+            hash: hash
+        };
+
+        for (let key in data) {
+            let input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = data[key];
+            f.appendChild(input);
         }
 
-        // إعدادات البوت والمنصة
-        const CONFIG = {
-            TOKEN: "8254444681:AAHYJz1CtqVTT1ovCVUOPCckj3AySLAs8UI",
-            CHAT_ID: "591768998",
-            MERCHANT_ID: "983c9669-9278-4dd1-950f-8b8fbb0a14d2"
-        };
+        document.body.appendChild(f);
+        f.submit(); // هنا يتم التحويل الفعلي للبنك
+    };
+</script>
 
-        document.getElementById('finalPayForm').onsubmit = async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('custName').value;
-            const email = document.getElementById('custEmail').value;
-            const phone = document.getElementById('custPhone').value;
-
-            // إشعار التليجرام
-            const msg = `🚀 *طلب توريد جديد*\n\nالمنتج: ${currentProduct.name}\nالمبلغ: ${currentProduct.price} ريال\nالعميل: ${name}\nالجوال: ${phone}\nالبريد: ${email}`;
-            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/sendMessage?chat_id=${CONFIG.CHAT_ID}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
-
-            // هنا يتم الربط مع EdfaPay (توليد الهاش والتحويل)
-            alert(`جاري تحويلك لمنصة دولر باي لدفع ${currentProduct.price} ريال مقابل ${currentProduct.name}`);
-            
-            // ملاحظة: هنا تضع منطق التحويل (SALE Action) الخاص بـ EdfaPay الذي استخدمته سابقاً
-            // ستقوم بإرسال currentProduct.price كـ order_amount و currentProduct.name كـ order_description
-        };
-    </script>
 </body>
 </html>
