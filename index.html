@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة توريد دولر | Dolr Gateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f4f7f6; }
+        .dolr-card { border: 1px solid #e0e0e0; transition: all 0.3s ease; }
+        .dolr-card:hover { transform: scale(1.02); border-color: #2563eb; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .gradient-text { background: linear-gradient(90deg, #1e3a8a, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body>
+
+    <nav class="bg-white shadow-sm p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-black gradient-text tracking-tighter">DOLR TAWREED</h1>
+            <span class="text-sm font-bold text-gray-400">بوابة التوريد الرقمي</span>
+        </div>
+    </nav>
+
+    <header class="py-12 text-center">
+        <h2 class="text-4xl font-black text-gray-800 mb-2">بوابة توريد دولر (Dolr)</h2>
+        <p class="text-gray-500">اختر المنتج وسيم تحويلك مباشرة لإتمام الدفع والاستلام</p>
+    </header>
+
+    <main class="container mx-auto px-4 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="dolr-card bg-white p-8 rounded-3xl text-center">
+                <div class="text-4xl mb-4">🌐</div>
+                <h3 class="text-xl font-bold text-gray-800">إنترنت STC مفتوح</h3>
+                <p class="text-sm text-gray-400 mt-1">توريد فوري</p>
+                <div class="text-3xl font-black text-blue-600 my-6">45 ريال</div>
+                <button onclick="redirectToPayment(45, 'STC_NET')" class="w-full bg-black text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition">اطلب الآن</button>
+            </div>
+
+            <div class="dolr-card bg-white p-8 rounded-3xl text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-yellow-400 text-[10px] px-3 py-1 font-bold">الأكثر طلباً</div>
+                <div class="text-4xl mb-4">👻</div>
+                <h3 class="text-xl font-bold text-gray-800">سناب شات الرسمي</h3>
+                <select id="snap-plan" class="w-full mt-4 p-3 border border-gray-100 rounded-xl bg-gray-50 font-bold text-center outline-none">
+                    <option value="16">3 أشهر - 16 ريال</option>
+                    <option value="30">6 أشهر - 30 ريال</option>
+                    <option value="72">سنة كاملة - 72 ريال</option>
+                </select>
+                <div id="snap-display-price" class="text-3xl font-black text-blue-600 my-6">16 ريال</div>
+                <button onclick="initSnapPayment()" class="w-full bg-black text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition">اطلب الآن</button>
+            </div>
+
+            <div class="dolr-card bg-white p-8 rounded-3xl text-center">
+                <div class="text-4xl mb-4">🤖</div>
+                <h3 class="text-xl font-bold text-gray-800">CHAT GPT Plus</h3>
+                <p class="text-sm text-gray-400 mt-1">اشتراك رسمي</p>
+                <div class="text-3xl font-black text-blue-600 my-6">25 ريال</div>
+                <button onclick="redirectToPayment(25, 'CHATGPT_YEAR')" class="w-full bg-black text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition">اطلب الآن</button>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // تحديث السعر المعروض للسناب عند تغيير الاختيار
+        document.getElementById('snap-plan')?.addEventListener('change', function(e) {
+            document.getElementById('snap-display-price').innerText = e.target.value + " ريال";
+        });
+
+        function initSnapPayment() {
+            const price = document.getElementById('snap-plan').value;
+            const planName = document.getElementById('snap-plan').options[document.getElementById('snap-plan').selectedIndex].text;
+            redirectToPayment(price, `سناب شات - ${planName}`);
+        }
+
+        // الوظيفة الأساسية للتحويل لبوابة الدفع وإرسال إشعار التليجرام
+        async function redirectToPayment(amount, productName) {
+            
+            // بيانات التليجرام الخاصة بك
+            const BOT_TOKEN = 'YOUR_BOT_TOKEN'; 
+            const CHAT_ID = 'YOUR_CHAT_ID';
+
+            const message = `
+💰 **طلب جديد من بوابة توريد Dolr**
+---
+📦 المنتج: ${productName}
+💵 السعر الثابت: ${amount} ريال
+💳 الحالة: تم التحويل لمنصة الدفع
+---
+            `;
+
+            // إرسال الإشعار للبوت
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
+            });
+
+            // هنا تضع رابط بوابة إدفع بي الخاص بك
+            // سيتم توجيه العميل للدفع
+            alert(`سيتم تحويلك الآن لمنصة الدفع لمنتج ${productName} بمبلغ ${amount} ريال`);
+            
+            // window.location.href = `رابط_بوابة_الدفع_الخاص_بك?amount=${amount}`;
+        }
+    </script>
+</body>
+</html>
